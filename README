@@ -1,0 +1,21 @@
+Code for researching heuristic search algorithms, this is a simplified version of the code for heuristic search research: https://github.com/snlemons/search.
+
+You can build with either GCC or clang.  If one or the other doesn't
+work then it is a bug so please tell me.
+
+Ubuntu package dependencies:
+	libboost-dev
+
+The plat2d/watch binary and graphics code also need:
+	libsdl1.2-dev libsdl-image1.2-dev
+
+search/learnh/lms needs lapack:
+	liblapack-dev
+
+Clang versions less than 3.0 do not seem to work.
+
+
+
+Commands: 
+
+For MovingAI scenarios: '''./scenario_solver astar -maproot MovingAI\ benchmarks/ -entry 129 < MovingAI\ benchmarks/arena.map.scen'''
