@@ -16,43 +16,6 @@ template <class D> struct BSBS : public SearchAlgorithm<D> {
 	std::size_t n_beam_expansions = 0;
 	std::size_t n_astar_expansions = 0;
 
-	// struct SearchState{
-	// 	private:
-	// 		enum RoundRobinState {f, fhat, d};
-	// 		RoundRobinState state;
-	// 	public:
-	// 		SearchState():state(RoundRobinState::f){}
-	// 		SearchState(const SearchState& s):state(s.state){}
-
-	// 		bool is_d() const {
-	// 			return state == RoundRobinState::d;
-	// 		}
-
-	// 		bool is_f() const{
-	// 			return state == RoundRobinState::f;
-	// 		}
-
-	// 		bool is_fhat() const {
-	// 			return state == RoundRobinState::fhat;
-	// 		}
-
-	// 		SearchState operator++(int){
-	// 			auto old_state = SearchState(*this);
-	// 			switch(state){
-	// 				case RoundRobinState::f:
-	// 					state = RoundRobinState::fhat;
-	// 					break;
-	// 				case RoundRobinState::fhat:
-	// 					state = RoundRobinState::d;
-	// 					break;
-	// 				case RoundRobinState::d:
-	// 					state = RoundRobinState::f;
-	// 					break;
-	// 			} 
-	// 			return old_state;
-	// 		}
-	// };
-
 	struct Node {
 
 		ClosedEntry<Node, D> closedent;
@@ -119,24 +82,6 @@ template <class D> struct BSBS : public SearchAlgorithm<D> {
 		}	
 	};
 
-	// struct FHatOps {
-
-	// 	static double getvalue(const Node *n) {
-	// 		return n->fhat;
-	// 	}
-	
-	// 	static bool pred(Node *a, Node *b) {
-	// 		/*
-	// 		if (a->fhat == b->fhat) {
-	// 			if (a->d == b->d)
-	// 				return a->g > b->g;
-	// 			return a->d < b->d;
-	// 		}
-	// 		*/
-	// 		return a->fhat < b->fhat;
-	// 	}	
-	// };
-
 	BSBS(int argc, const char *argv[]) :
 			SearchAlgorithm<D>(argc, argv), herror(0), derror(0), 
 			dropdups(false), wt(-1.0), closed(30000001) {
@@ -174,10 +119,7 @@ template <class D> struct BSBS : public SearchAlgorithm<D> {
 			// std::cerr << "cleanup not empty:\n";
 		}
 		Node *bestF = *cleanup.front();
-		// std::cerr << "post-cleaup front\n";
-		//   auto ss = SearchState(search_state++);
 
-		// if(ss.is_d() && bestDHat && bestDHat->fhat <= wt*bestF->f) {
 		if(focal.empty()){
 			// std::cerr << "focal empty:\n";
 			cleanup.remove(bestF);
@@ -197,11 +139,9 @@ template <class D> struct BSBS : public SearchAlgorithm<D> {
 		closed.init(d);
 
 		Node *n0 = init(d, s0);
-		// closed.add(n0);
 		focal.push(n0);
 		cleanup.push(n0);
 
-		// fmin = n0->f;
 
 		bool isIncrease;
 		// Dummy node to represent weighted n0.
@@ -221,27 +161,6 @@ template <class D> struct BSBS : public SearchAlgorithm<D> {
 				// std::cerr << "making beam\n";
 				// process focal into beam
 				Node *n = select_node(); // focal is not empty, so will be from focal
-				// unsigned long hash = n->state.hash(&d);
-				// Node *dup = closed.find(n->state, hash);
-				// if(!dup) {
-				// //   closed.add(n, hash);
-				// } else {
-				// 	std::cerr << "duplicate!" << std::endl;
-				//   SearchAlgorithm<D>::res.dups++;
-				//   if(!dropdups && n->g < dup->g) {
-				// 	SearchAlgorithm<D>::res.reopnd++;
-					
-				// 	dup->f = dup->f - dup->g + n->g;
-				// 	dup->g = n->g;
-				// 	dup->d = n->d;
-				// 	dup->parent = n->parent;
-				// 	dup->op = n->op;
-				// 	dup->pop = n->pop;
-				//   } else {
-				// 	continue;
-				//   }
-				// }
-
 				beam[c] = n;
 				c++;
 			}
